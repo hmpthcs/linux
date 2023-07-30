@@ -1,3 +1,8 @@
+This repo is a fork of m-weigand's custom linux kernel for the pinenote intended for testing tweaks and added features. Novel branches so far:
+
+* **tunable_2bit_thresholds** -- clone of branch_pinenote_6-3-10_v1 with modifications to allow changing thresholds for 4 tone grayscale mode (bw_mode = 3) via module parameters.
+
+
 # Description of new branches and merge order
 
 ## Branches
