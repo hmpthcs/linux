@@ -245,17 +245,17 @@ static int bw_threshold = 7;
 module_param(bw_threshold, int, S_IRUGO|S_IWUSR);
 MODULE_PARM_DESC(bw_threshold, "black and white threshold");
 
-static int 2bit_low_threshold = 4;
-module_param(2bit_low_threshold, int, S_IRUGO|S_IWUSR);
-MODULE_PARM_DESC(2bit_low_threshold, "everything below this is white");
+static int fourtone_low_threshold = 4;
+module_param(fourtone_low_threshold, int, S_IRUGO|S_IWUSR);
+MODULE_PARM_DESC(fourtone_low_threshold, "everything below this is white");
 
-static int 2bit_mid_threshold = 7;
-module_param(2bit_mid_threshold, int, S_IRUGO|S_IWUSR);
-MODULE_PARM_DESC(2bit_mid_threshold, "from low_threshold to here is light gray; from here to hi_threhsold is dark gray");
+static int fourtone_mid_threshold = 7;
+module_param(fourtone_mid_threshold, int, S_IRUGO|S_IWUSR);
+MODULE_PARM_DESC(fourtone_mid_threshold, "from low_threshold to here is light gray; from here to hi_threhsold is dark gray");
 
-static int 2bit_hi_threshold = 12;
-module_param(2bit_hi_threshold, int, S_IRUGO|S_IWUSR);
-MODULE_PARM_DESC(2bit_hi_threshold, "everything above this is black");
+static int fourtone_hi_threshold = 12;
+module_param(fourtone_hi_threshold, int, S_IRUGO|S_IWUSR);
+MODULE_PARM_DESC(fourtone_hi_threshold, "everything above this is black");
 
 static int bw_dither_invert = 0;
 module_param(bw_dither_invert, int, S_IRUGO|S_IWUSR);
@@ -1829,21 +1829,21 @@ static bool rockchip_ebc_blit_fb_xrgb8888(const struct rockchip_ebc_ctx *ctx,
 				case 3:
 					// downsample to 4 bw values corresponding to the DU4
 					// transitions: 0, 5, 10, 15
-					if (rgb0 < 2bit_low_threshold){
+					if (rgb0 < fourtone_low_threshold){
 						rgb0 = 0;
-					} else if (rgb0  < 2bit_mid_threshold){
+					} else if (rgb0  < fourtone_mid_threshold){
 						rgb0 = 5;
-					} else if (rgb0  < 2bit_hi_threshold){
+					} else if (rgb0  < fourtone_hi_threshold){
 						rgb0 = 10;
 					} else {
 						rgb0 = 15;
 					}
 
-					if (rgb1 < 2bit_low_threshold){
+					if (rgb1 < fourtone_low_threshold){
 						rgb1 = 0;
-					} else if (rgb1  < 2bit_mid_threshold){
+					} else if (rgb1  < fourtone_mid_threshold){
 						rgb1 = 5;
-					} else if (rgb1  < 2bit_hi_threshold){
+					} else if (rgb1  < fourtone_hi_threshold){
 						rgb1 = 10;
 					} else {
 						rgb1 = 15;
