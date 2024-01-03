@@ -1,0 +1,6 @@
+# action.yml
+name: 'Pinenote kernel'
+description: 'Compile a 6.x kernel for the Pine64 PineNote'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
