@@ -250,9 +250,23 @@ MODULE_PARM_DESC(delay_c, "delay_c");
 // mode = 0: 16-level gray scale
 // mode = 1: 2-level black&white with dithering enabled
 // mode = 2: 2-level black&white, uses bw_threshold
+// mode = 3: 4-level gray scale; uses lo, mid and hi thresholds
+
 static int bw_mode = 0;
 module_param(bw_mode, int, S_IRUGO|S_IWUSR);
 MODULE_PARM_DESC(bw_mode, "black & white mode");
+
+static int du4_lo_threshold = 4;
+module_param(du4_lo_threshold, int, S_IRUGO|S_IWUSR);
+MODULE_PARM_DESC(du4_lo_threshold, "everything below lo_threshold is black");
+
+static int du4_mid_threshold = 7;
+module_param(du4_mid_threshold, int, S_IRUGO|S_IWUSR);
+MODULE_PARM_DESC(du4_mid_threshold, "everything from lo_threshold to mid_threshold is dark gray; from mid_threshold to hi_threhsold is light gray");
+
+static int du4_hi_threshold = 12;
+module_param(du4_hi_threshold, int, S_IRUGO|S_IWUSR);
+MODULE_PARM_DESC(du4_hi_threshold, "everything above hi_threshold is white");
 
 static int bw_threshold = 7;
 module_param(bw_threshold, int, S_IRUGO|S_IWUSR);
@@ -1933,21 +1947,20 @@ static bool rockchip_ebc_blit_fb_xrgb8888(const struct rockchip_ebc_ctx *ctx,
 				case 3:
 					// downsample to 4 bw values corresponding to the DU4
 					// transitions: 0, 5, 10, 15
-					if (rgb0 < 4){
+				if (rgb0 < du4_lo_threshold){
 						rgb0 = 0;
-					} else if (rgb0  < 8){
+					} else if (rgb0  < du4_mid_threshold){
 						rgb0 = 5;
-					} else if (rgb0  < 12){
-						rgb0 = 10;
+					} else if (rgb0  < du4_hi_threshold){
+						rgb1 = 10;
 					} else {
-						rgb0 = 15;
+						rgb1 = 15;
 					}
-
-					if (rgb1 < 4){
+					if (rgb1 < du4_lo_threshold){
 						rgb1 = 0;
-					} else if (rgb1  < 8){
+					} else if (rgb1  < du4_mid_threshold){
 						rgb1 = 5;
-					} else if (rgb1  < 12){
+					} else if (rgb1  < du4_hi_threshold){
 						rgb1 = 10;
 					} else {
 						rgb1 = 15;
